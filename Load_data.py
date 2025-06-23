@@ -38,7 +38,7 @@ def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_dat
         'field6': 'CO2'
     })
 
-    df.drop(columns=['entry_id', 'latitude', 'longitude','elevation', 'status'])
+    df.drop(columns=['entry_id'], inplace=True)
 
     # Simpan ke folder data/raw/
     os.makedirs("data/raw", exist_ok=True)
@@ -47,3 +47,10 @@ def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_dat
     print(f"Data saved to {filename}")
 
     return df
+
+df_all = fetch_all_thingspeak_data(
+    channel_id=2990169,
+    api_key="LDXFP3LRNTBZCFMU",
+    start_date=datetime(2025, 6, 16),
+    end_date=datetime(2025, 6, 22)
+)
