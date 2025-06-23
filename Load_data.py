@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
+import os
 
 def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_date=None, batch_days=7):
     all_data = []
@@ -27,8 +28,10 @@ def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_dat
     df = pd.DataFrame(all_data)
     df['created_at'] = pd.to_datetime(df['created_at'])
 
-    # Simpan ke CSV berdasarkan range tanggal
-    filename = f"ENV_data_{start_date.date()}_to_{end_date.date()}.csv"
+    # Buat folder jika belum ada
+    os.makedirs("data/raw", exist_ok=True)
+
+    filename = f"data/raw/ENV_data_{start_date.date()}_to_{end_date.date()}.csv"
     df.to_csv(filename, index=False)
     print(f"Data saved to {filename}")
 
