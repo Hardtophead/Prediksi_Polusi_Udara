@@ -28,24 +28,22 @@ def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_dat
     df = pd.DataFrame(all_data)
     df['created_at'] = pd.to_datetime(df['created_at'])
 
-    # Buat folder jika belum ada
-    os.makedirs("data/raw", exist_ok=True)
+    # Rename kolom field ke nama Polusi
+    df = df.rename(columns={
+        'field1': 'Temperature',
+        'field2': 'Humidity',
+        'field3': 'PM2.5',
+        'field4': 'PM10',
+        'field5': 'CO',
+        'field6': 'CO2'
+    })
 
+    df.drop(columns=['entry_id', 'latitude', 'longitude','elevation', 'status'])
+
+    # Simpan ke folder data/raw/
+    os.makedirs("data/raw", exist_ok=True)
     filename = f"data/raw/ENV_data_{start_date.date()}_to_{end_date.date()}.csv"
     df.to_csv(filename, index=False)
     print(f"Data saved to {filename}")
 
     return df
-
-CHANNEL_ID = 2990169
-READ_API_KEY = "LDXFP3LRNTBZCFMU"
-START_DATE = datetime(2025, 6, 15)
-END_DATE = datetime(2025, 6, 22)
-
-df_all = fetch_all_thingspeak_data(
-    channel_id=CHANNEL_ID,
-    api_key=READ_API_KEY,
-    start_date=START_DATE,
-    end_date=END_DATE,
-    batch_days=7
-)
