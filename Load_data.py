@@ -48,9 +48,9 @@ def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_dat
 
     return df
 
-df_all = fetch_all_thingspeak_data(
-    channel_id=2990169,
-    api_key="LDXFP3LRNTBZCFMU",
-    start_date=datetime(2025, 6, 16),
-    end_date=datetime(2025, 6, 22)
-)
+# df_all = fetch_all_thingspeak_data(
+#     channel_id=2990169,
+#     api_key="LDXFP3LRNTBZCFMU",
+#     start_date=datetime(2025, 6, 16),
+#     end_date=datetime(2025, 6, 23)
+# )
