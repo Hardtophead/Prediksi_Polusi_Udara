@@ -11,10 +11,10 @@ def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_dat
 
         url = f"https://api.thingspeak.com/channels/{channel_id}/feeds.json"
         params = {
-            'start': current_start.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'start': current_start.strftime("%Y-%m-%dT%H:%M:%SZ"),  # UTC
             'end': current_end.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'api_key': api_key,
-            'timezone': 'Asia/Jakarta'
+            'timezone': 'UTC'  # tetap minta dalam UTC untuk kontrol penuh
         }
 
         r = requests.get(url, params=params)
@@ -25,10 +25,11 @@ def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_dat
         print(f"Fetched: {current_start} → {current_end}, Rows: {len(feeds)}")
         current_start = current_end
 
+    # Buat DataFrame dan parse waktu dengan UTC → lalu konversi ke WIB
     df = pd.DataFrame(all_data)
-    df['created_at'] = pd.to_datetime(df['created_at'])
+    df['created_at'] = pd.to_datetime(df['created_at'], utc=True).dt.tz_convert('Asia/Jakarta')
 
-    # Rename kolom field ke nama Polusi
+    # Rename field ke nama fitur sensor
     df = df.rename(columns={
         'field1': 'Temperature',
         'field2': 'Humidity',
@@ -48,9 +49,10 @@ def fetch_all_thingspeak_data(channel_id, api_key=None, start_date=None, end_dat
 
     return df
 
+# Jalankan pengambilan data
 df_all = fetch_all_thingspeak_data(
     channel_id=2990169,
     api_key="LDXFP3LRNTBZCFMU",
-    start_date=datetime(2025, 6, 20),
-    end_date=datetime(2025, 6, 24)
+    start_date=datetime(2025, 6, 21),
+    end_date=datetime(2025, 7, 9)
 )
