@@ -62,6 +62,6 @@ df_all = fetch_all_thingspeak_data(
     channel_id=2990169,
     api_key="LDXFP3LRNTBZCFMU",
     start_date=datetime(2025, 6, 21),
-    end_date=datetime(2025, 7, 9),
+    end_date=datetime(2025, 7, 13),
     batch_days=1  # ← penting supaya data tidak hilang
 )
